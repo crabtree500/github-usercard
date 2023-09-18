@@ -1,9 +1,13 @@
+import axios from "axios"
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
+axios.get(" https://api.github.com/users/crabtree500")
+.then((res) => {
+Usercard(res.data)
+})
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -27,9 +31,52 @@
     Using that array, iterate over it, requesting data for each user, creating a new card for each
     user, and adding that card to the DOM.
 */
-
-const followersArray = [];
-
+const cardpile = document.querySelector(".cards")
+const followersArray = [ "tetondan","dustinmyers", "justsml","luishrd","bigknell"];
+function Usercard({name, avatar_url, login, location, url, followers, following, bio}){
+const card = document.createElement("div")
+card.classList.add("card")
+const imag = document.createElement("img")
+imag.src = avatar_url
+const userinf = document.createElement("div")
+userinf.classList.add("card-info")
+const nam = document.createElement("h3")
+nam.classList.add("name");
+nam.textContent = name;
+const pnam = document.createElement("p")
+pnam.classList.add("username")
+pnam.textContent = login
+const ploc = document.createElement("p")
+ploc.textContent = location;
+const pprof = document.createElement("p")
+const plink = document.createElement("a")
+plink.href= url; plink.textContent = url
+const pfol1 = document.createElement("p")
+pfol1.textContent = followers
+const pfol2 = document.createElement("p")
+pfol2.textContent = following
+const pbio = document.createElement("p")
+pbio.textContent = bio
+card.appendChild(imag)
+card.appendChild(userinf)
+userinf.appendChild(nam)
+userinf.appendChild(pnam)
+userinf.appendChild(ploc)
+userinf.appendChild(pprof)
+userinf.appendChild(plink)
+userinf.appendChild(pfol1)
+userinf.appendChild(pfol2)
+userinf.appendChild(pbio)
+cardpile.appendChild(card)
+return card
+}
+followersArray.forEach((item) => {
+  axios.get(`https://api.github.com/users/${item}`)
+  .then((res) =>{
+    Usercard(res.data)
+  })
+.catch((err) => console.error(err))
+})
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -49,7 +96,6 @@ const followersArray = [];
       </div>
     </div>
 */
-
 /*
   List of LS Instructors Github username's:
     tetondan
